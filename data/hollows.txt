@@ -1,0 +1,6 @@
+# Formato: nombre,personaje1,personaje2,personaje3,fondo
+EEOO,Bad_Bunny,Feid,Rauw_Alejandro,fiesta_b.JPG
+Do you think about me?,NSQK,Alavaro_Diaz,LATIN_MAFIA,habitacion_b.JPG
+Karaoke,Luis_Miguel,Juan_Gabriel,Jose_Jose,karaoke_b.JPG
+Musicalezzzz,Hazbin_Hotel,Hamilton,EPIC,teatro_b.PNG
+nono ningun hello,Kanye_West,Tyler_the_Creator,The_Weeknd,disney_b.JPG
