@@ -5,6 +5,8 @@ from tkinter import messagebox
 import sys
 sys.path.append('.')
 from logica.personajes import cargar_personajes
+from pantallas.pantalla_mapa import pantalla_mapa
+from logica.hollows import cargar_hollows
 
 with open("data/personajes (2).txt", "r", encoding="utf-8") as archivo:
     lineas = archivo.readlines()
@@ -47,7 +49,8 @@ def pantalla_inicio(root):
             if len(estado["personajes"]) < 3:
                 seleccion_personajes(None)
             else:
-                print("ir al mapa con", estado)
+                canvas.destroy()
+                pantalla_mapa(root, hollows, estado)
 
     def abrir_perfil(e):
         ventana_perfil = Toplevel(root)
@@ -142,6 +145,10 @@ def pantalla_inicio(root):
     canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
     canvas.tag_bind(boton_info, "<Button-1>", lambda e: print("info"))
     canvas.tag_bind(boton_perfil, "<Button-1>", abrir_perfil)
+    
+with open("data/hollows.txt", "r", encoding="utf-8") as archivo:
+    lineas_hollows = archivo.readlines()
+hollows = cargar_hollows(lineas_hollows)
 
 if __name__ == "__main__":
     root = Tk()
