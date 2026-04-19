@@ -127,8 +127,8 @@ def pantalla_inicio(root):
             else:
                 estado["personajes"] = elegidos
                 ventana_perfil.destroy()
-                root.destroy()  # cierra ventana de inicio completamente
-                nuevo_root = Tk()  # crea ventana nueva
+                root.destroy()
+                nuevo_root = Tk()
                 nuevo_root.title("Mapa")
                 nuevo_root.resizable(NO, NO)
                 pantalla_mapa(nuevo_root, hollows, estado)
