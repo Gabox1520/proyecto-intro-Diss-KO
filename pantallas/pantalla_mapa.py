@@ -27,6 +27,25 @@ def pantalla_mapa(root, hollows, estado):
         {"hollow": hollows[4], "x": 360, "y": 450, "img": "nono ningun hello.png.png"},
     ]
 
+    def abrir_presentacion(hollow_info):
+        ventana = Toplevel(root)
+        ventana.title("¡A LA TIRADERA!")
+        ventana.resizable(NO, NO)
+        Label(ventana, text=f"¡{estado['nombre']} vs {hollow_info['hollow']['nombre']}!",
+            font=('Arial', 20)).pack(pady=20)
+        Button(ventana, text="¡A LA TIRADERA!", font=('Arial', 16),
+            bg='#1db954', fg='white',
+            command=lambda: print("DISSTRACK")).pack(pady=20)
+
+    def detectar_click(event, pos, index=0):
+        if index >= len(pos):
+            return
+        p = pos[index]
+        if p["x"] <= event.x <= p["x"]+100 and p["y"] <= event.y <= p["y"]+100:
+            abrir_presentacion(p)
+            return
+        detectar_click(event, pos, index+1)
+
     def mostrar_hollow(pos, index=0):
         if index >= len(pos):
             return
@@ -39,7 +58,8 @@ def pantalla_mapa(root, hollows, estado):
         mostrar_hollow(pos, index+1)
 
     mostrar_hollow(posiciones)
+    canvas.bind("<Button-1>", lambda e: detectar_click(e, posiciones))
+
     img_avatar = cargar_img(estado["avatar"], size=(80, 80))
     canvas.create_image(601, 530, anchor=NW, image=img_avatar)
     canvas.imagenes.append(img_avatar)
-

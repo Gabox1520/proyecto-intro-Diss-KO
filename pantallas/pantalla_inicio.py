@@ -12,6 +12,11 @@ with open("data/personajes (2).txt", "r", encoding="utf-8") as archivo:
     lineas = archivo.readlines()
 lista_personajes = cargar_personajes(lineas)
 
+with open("data/hollows.txt", "r", encoding="utf-8") as archivo:
+    lineas_hollows = archivo.readlines()
+hollows = cargar_hollows(lineas_hollows)
+
+
 def cargar_img(nombre, size=None):
     ruta = os.path.join('imgs_dissKO', nombre)
     if not os.path.exists(ruta):
@@ -25,6 +30,7 @@ def pantalla_inicio(root):
     estado = {"nombre": None, "avatar": None, "personajes": []}
     canvas = Canvas(root, width=1300, height=800)
     canvas.pack()
+    canvas.focus_set()
     bg = cargar_img("imagen_inicio.png", size=(1300, 800))
     canvas.create_image(0, 0, anchor='nw', image=bg)
     canvas.bg = bg
@@ -49,7 +55,7 @@ def pantalla_inicio(root):
             if len(estado["personajes"]) < 3:
                 seleccion_personajes(None)
             else:
-                canvas.destroy()
+                canvas.pack_forget()
                 pantalla_mapa(root, hollows, estado)
 
     def abrir_perfil(e):
@@ -121,6 +127,12 @@ def pantalla_inicio(root):
             else:
                 estado["personajes"] = elegidos
                 ventana_perfil.destroy()
+                root.destroy()  # cierra ventana de inicio completamente
+                nuevo_root = Tk()  # crea ventana nueva
+                nuevo_root.title("Mapa")
+                nuevo_root.resizable(NO, NO)
+                pantalla_mapa(nuevo_root, hollows, estado)
+                nuevo_root.mainloop()
 
         frame = Frame(ventana_perfil)
         frame.pack()
@@ -146,9 +158,6 @@ def pantalla_inicio(root):
     canvas.tag_bind(boton_info, "<Button-1>", lambda e: print("info"))
     canvas.tag_bind(boton_perfil, "<Button-1>", abrir_perfil)
     
-with open("data/hollows.txt", "r", encoding="utf-8") as archivo:
-    lineas_hollows = archivo.readlines()
-hollows = cargar_hollows(lineas_hollows)
 
 if __name__ == "__main__":
     root = Tk()
