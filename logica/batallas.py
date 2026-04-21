@@ -14,17 +14,24 @@ def eq_derrotado(equipo, index=0):
         return False
     return eq_derrotado(equipo, index+1)
 #define el turno en la batalla, cambia cada que termina el turno y lleva un contador de turnos
-def turno(atacante, defensor, eq_atc, eq_def, turno_jug, turno_num=0):
+def turno(atacante, defensor, eq_atc, eq_def, turno_jug, turno_num=1, puntos_j=0, puntos_h=0):
     if eq_derrotado(eq_def):
         ganador = "jugador" if turno_jug == "jugador" else "Hollow"
-        return {"ganador": ganador, "turno": turno_num}
-    if eq_derrotado(eq_atc):
-        ganador = "Hollow" if turno_jug == "jugador" else "jugador"
-        return {"ganador": ganador, "turno": turno_num}
+        return {"ganador": ganador, "turno": turno_num, "puntos_j": puntos_j, "puntos_h": puntos_h}
+
     daño = calcular_daño(atacante, defensor)
     defensor["vida"] -= daño
+
     if defensor["vida"] <= 0:
-       defensor["vida"] = defensor["hp_max"]
-       eq_def.remove(defensor)
-       eq_atc.append(defensor)
-    return turno(defensor, atacante, eq_def, eq_atc, "Hollow" if turno_jug == "jugador" else "jugador", turno_num+1)
+        defensor["vida"] = defensor["hp_max"]
+        eq_def.remove(defensor)
+        eq_atc.append(defensor)
+        
+        if turno_jug == "jugador":
+            puntos_j += 1
+        else:
+            puntos_h += 1
+
+    return turno(defensor, atacante, eq_def, eq_atc, 
+                 "Hollow" if turno_jug == "jugador" else "jugador", 
+                 turno_num + 1, puntos_j, puntos_h)

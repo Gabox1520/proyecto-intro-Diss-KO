@@ -56,7 +56,7 @@ def pantalla_inicio(root):
                 seleccion_personajes(None)
             else:
                 canvas.pack_forget()
-                pantalla_mapa(root, hollows, estado)
+                pantalla_mapa(root, hollows, estado, lista_personajes)
 
     def abrir_perfil(e):
         ventana_perfil = Toplevel(root)
