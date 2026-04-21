@@ -6,7 +6,7 @@ def calcular_daño(atacante, defensor):
     if daño<1:
         daño=1
     return daño
-#revisa si el equipo está derrotado, es decir, si todos sus personajes tienen vida <=0
+#revisa si el equipo está derrotado(si todos sus personajes tienen vida 0)
 def eq_derrotado(equipo, index=0):
     if index>=len(equipo):
         return True

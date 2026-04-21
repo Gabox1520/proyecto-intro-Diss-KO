@@ -23,3 +23,9 @@ def cargar_personajes(lineas, index=0, resultado=None):
     resultado.append(personaje)
     return cargar_personajes(lineas, index+1, resultado)
 
+def buscar_personaje(nombre, personajes, index=0):
+    if index >= len(personajes):
+        return None
+    if personajes[index]["nombre"].lower() == nombre.lower():
+        return personajes[index]
+    return buscar_personaje(nombre, personajes, index+1)

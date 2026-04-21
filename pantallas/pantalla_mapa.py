@@ -1,6 +1,10 @@
+import sys
 from tkinter import *
 from PIL import Image, ImageTk
 import os
+sys.path.append('.')
+from logica.personajes import buscar_personaje
+from pantallas.pantalla_pelea import pantalla_batalla
 
 def cargar_img(nombre, size=None):
     ruta = os.path.join('imgs_dissKO', nombre)
@@ -11,7 +15,7 @@ def cargar_img(nombre, size=None):
         img = img.resize(size, Image.LANCZOS)
     return ImageTk.PhotoImage(img)
 
-def pantalla_mapa(root, hollows, estado):
+def pantalla_mapa(root, hollows, estado, lista_personajes):
     canvas = Canvas(root, width=1280, height=720)
     canvas.pack()
 
@@ -26,17 +30,6 @@ def pantalla_mapa(root, hollows, estado):
         {"hollow": hollows[3], "x": 895, "y": 360, "img": "musicalezzz.png.png"},
         {"hollow": hollows[4], "x": 360, "y": 450, "img": "nono ningun hello.png.png"},
     ]
-
-    def abrir_presentacion(hollow_info):
-        ventana = Toplevel(root)
-        ventana.title("¡A LA TIRADERA!")
-        ventana.resizable(NO, NO)
-        Label(ventana, text=f"¡{estado['nombre']} vs {hollow_info['hollow']['nombre']}!",
-            font=('Arial', 20)).pack(pady=20)
-        Button(ventana, text="¡A LA TIRADERA!", font=('Arial', 16),
-            bg='#1db954', fg='white',
-            command=lambda: print("DISSTRACK")).pack(pady=20)
-
     def detectar_click(event, pos, index=0):
         if index >= len(pos):
             return
@@ -45,6 +38,43 @@ def pantalla_mapa(root, hollows, estado):
             abrir_presentacion(p)
             return
         detectar_click(event, pos, index+1)
+
+    def abrir_presentacion(hollow_info):
+        canvas.unbind("<Button-1>")
+        ventana = Toplevel(root)
+        ventana.title("¡A LA TIRADERA!")
+        ventana.resizable(NO, NO)
+                                    
+        def construir_equipo(nombres, index=0, resultado=None):
+            if resultado is None:
+                resultado = []
+            if index >= len(nombres):
+                return resultado
+            p = buscar_personaje(nombres[index], lista_personajes)
+            if p:
+                resultado.append(p)
+            return construir_equipo(nombres, index+1, resultado)
+        
+        def _iniciar_batalla():
+            ventana.destroy()
+            eq_jugador = construir_equipo(estado["personajes"])
+            eq_hollow = construir_equipo([
+                hollow_info["hollow"]["personaje1"],
+                hollow_info["hollow"]["personaje2"],
+                hollow_info["hollow"]["personaje3"]
+            ])
+            canvas.pack_forget()
+            pantalla_batalla(root, estado, hollow_info["hollow"], eq_jugador, eq_hollow)
+
+        def re_habilitar():
+            ventana.destroy()
+            canvas.bind("<Button-1>", lambda e: detectar_click(e, posiciones))
+        ventana.protocol("WM_DELETE_WINDOW", re_habilitar)
+
+        Label(ventana, text=f"¡{estado['nombre']} vs {hollow_info['hollow']['nombre']}!",
+            font=('Arial', 20)).pack(pady=20)
+        Button(ventana, text="¡A LA TIRADERA!", font=('Arial', 16),
+               command=_iniciar_batalla).pack(pady=20)
 
     def mostrar_hollow(pos, index=0):
         if index >= len(pos):

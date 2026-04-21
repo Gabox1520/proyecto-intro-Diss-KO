@@ -131,7 +131,7 @@ def pantalla_inicio(root):
                 nuevo_root = Tk()
                 nuevo_root.title("Mapa")
                 nuevo_root.resizable(NO, NO)
-                pantalla_mapa(nuevo_root, hollows, estado)
+                pantalla_mapa(nuevo_root, hollows, estado, lista_personajes)
                 nuevo_root.mainloop()
 
         frame = Frame(ventana_perfil)
