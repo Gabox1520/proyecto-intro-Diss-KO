@@ -4,7 +4,6 @@ import os
 import sys
 import random
 from tkinter import messagebox
-
 sys.path.append('.')
 from logica.batallas import calcular_daño, eq_derrotado, decidir_turno
 
@@ -43,7 +42,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
                 fg='gold')
     lbl_turnos.place(x=610, y=55)
 
-    # --- PANEL DE LOG ---
+    #PANEL DE LOG
     frame_log = Frame(root, bg="#1a1a1a", bd=2, relief=SUNKEN)
     frame_log.place(x=850, y=520, width=400, height=180)
     lbl_titulo_log = Label(frame_log, text="SISTEMA DE COMBATE", font=('Arial', 10, 'bold'), bg='#333', fg='white')
@@ -60,7 +59,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
             historial_acciones.pop(0)
         txt_historial.config(text="\n".join(historial_acciones))
 
-    # --- LÓGICA DE RESTAURACIÓN (RECURSIVA) ---
+    #restauracion
     def restaurar_equipo_original(nombres, lista_completa, index=0, resultado=None):
         if resultado is None: resultado = []
         if index >= len(nombres): return resultado
@@ -70,7 +69,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
         p_base = buscar_personaje(nombres[index], lista_completa)
         
         if p_base:
-            # Creamos un diccionario NUEVO para romper cualquier vínculo con la batalla anterior
+            # se crea un diccionario nuevo para romper vinculos con la batalla anterior
             p_limpio = p_base.copy() 
             # Forzamos que la vida sea igual al máximo
             p_limpio["vida"] = p_limpio["hp_max"] 
@@ -109,7 +108,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
         if equipo[index]["vida"] > 0: return equipo[index]
         return obtener_activo(equipo, index + 1)
 
-    # --- ACTUALIZACIÓN DE INTERFAZ ---
+    #se actualiza la interfaz
     activo_j = obtener_activo(eq_jugador)
     activo_h = obtener_activo(eq_hollow)
 

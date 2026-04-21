@@ -36,11 +36,11 @@ def pantalla_mapa(root, hollows, estado, lista_personajes):
         ventana_derrotado.title("Hollow derrotado")
         ventana_derrotado.resizable(NO, NO)
         def volver_al_mapa():
-        # Reactivamos el evento de clic en el canvas
+        # reactiva el evento de clic en el canvas
             canvas.bind("<Button-1>", lambda e: detectar_click(e, posiciones))
             ventana_derrotado.destroy()
 
-            # Si cierran con la "X" de la ventana, reactivamos el mapa
+            # Si cierran con la "X" de la ventana, reactiva el mapa
         ventana_derrotado.protocol("WM_DELETE_WINDOW", volver_al_mapa)
 
         Label(ventana_derrotado, text="¡Has derrotado a este Hollow!", font=('Arial', 16)).pack(pady=20)
