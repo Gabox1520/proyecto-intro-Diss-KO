@@ -1,0 +1,9 @@
+from tkinter import *
+from pantallas.pantalla_inicio import pantalla_inicio
+
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Diss-KO")
+    root.resizable(NO, NO)
+    pantalla_inicio(root)
+    root.mainloop()

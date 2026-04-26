@@ -1,0 +1,13 @@
+DISS-KO
+
+I Proyecto de Introduccion a la Programación
+Tecnológico de Costa Rica
+Ingieneria en Computadores
+I Semestre 2026
+
+Hecho por: Gabriel Alejandro Ramírez Soto
+carné: 2026014088
+Profesor: Santiago Ramírez
+
+Informacion: DISS-KO es un juego de batallas por turnos con tematica musical en el que
+tienes que tienes que vencer a los 5 hollows y recuperar a los artistas atrapados en ellos

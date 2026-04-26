@@ -25,7 +25,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
     estado["puntos_jugador"] = 0
     estado["puntos_hollow"] = 0
     estado["turnos"] = 1
-    #CONTADOR DE PUNTOS
+    #Contador de puntos
     lbl_puntos = Label(canvas, 
                 text=f"CAPTURAS - TÚ: 0 | HOLLOW: 0", 
                 font=('Arial', 16, 'bold'), 
@@ -34,7 +34,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
                 padx=10, pady=5)
     lbl_puntos.place(x=520, y=10)
 
-    #CONTADOR DE TURNOS 
+    #Contador de turnos
     lbl_turnos = Label(canvas, 
                 text=f"TURNO: 1", 
                 font=('Arial', 12, 'bold'), 
@@ -42,7 +42,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
                 fg='gold')
     lbl_turnos.place(x=610, y=55)
 
-    #PANEL DE LOG
+    #Panel de log
     frame_log = Frame(root, bg="#1a1a1a", bd=2, relief=SUNKEN)
     frame_log.place(x=850, y=520, width=400, height=180)
     lbl_titulo_log = Label(frame_log, text="SISTEMA DE COMBATE", font=('Arial', 10, 'bold'), bg='#333', fg='white')
@@ -59,7 +59,7 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
             historial_acciones.pop(0)
         txt_historial.config(text="\n".join(historial_acciones))
 
-    #restauracion
+    #curar equipo
     def restaurar_equipo_original(nombres, lista_completa, index=0, resultado=None):
         if resultado is None: resultado = []
         if index >= len(nombres): return resultado
@@ -69,9 +69,9 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
         p_base = buscar_personaje(nombres[index], lista_completa)
         
         if p_base:
-            # se crea un diccionario nuevo para romper vinculos con la batalla anterior
+            # se crea un diccionario nuevo para no relacionarlo con el anterior y así evitar problemas con referencias
             p_limpio = p_base.copy() 
-            # Forzamos que la vida sea igual al máximo
+            # Forzamos que la vida sea igual al máximo (se tuvo que usar varias formas para que funcionara)
             p_limpio["vida"] = p_limpio["hp_max"] 
             resultado.append(p_limpio)
         
@@ -93,8 +93,13 @@ def pantalla_batalla(root, estado, hollow, eq_jugador, eq_hollow, lista_personaj
             nombre_hollow = hollow["nombre"]
             if nombre_hollow not in estado["derrotados"]:
                 estado["derrotados"].append(nombre_hollow)
-
-            messagebox.showinfo("¡VICTORIA!", "¡Tus personajes han recuperado energías y los Hollows capturados han vuelto a sus puestos!")
+            if len(estado["derrotados"]) == 5:
+                messagebox.showinfo("¡FELICITACIONES, Has terminado el juego!",
+                    f"!{estado['nombre']}! ¡Eres el mejor en tiraderas, FELICIDADES!")
+                root.destroy()
+                return
+            else:
+                messagebox.showinfo("¡VICTORIA!", "¡Tus personajes han recuperado energías y los Hollows capturados han vuelto a sus puestos!")
             
             canvas.destroy()
             frame_log.destroy()

@@ -1,3 +1,4 @@
+from cProfile import label
 from tkinter import *
 from PIL import Image, ImageTk
 import os
@@ -43,13 +44,17 @@ def pantalla_inicio(root):
     boton_perfil = canvas.create_rectangle(335, 362, 960, 436, fill='', outline='')
 
     def iniciar(e):
+        canvas.tag_unbind(Boton_jugar, "<Button-1>")
         nombre = E_nombre.get()
         if nombre == "" and estado["avatar"] is None:
             messagebox.showwarning("Aviso", "Falta tu nombre y tu avatar")
+            canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
         elif nombre == "":
             messagebox.showwarning("Aviso", "Falta tu nombre")
+            canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
         elif estado["avatar"] is None:
             messagebox.showwarning("Aviso", "Falta elegir tu avatar")
+            canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
         else:
             estado["nombre"] = nombre
             if len(estado["personajes"]) < 3:
@@ -59,6 +64,7 @@ def pantalla_inicio(root):
                 pantalla_mapa(root, hollows, estado, lista_personajes)
 
     def abrir_perfil(e):
+        canvas.tag_unbind(boton_perfil, "<Button-1>")
         ventana_perfil = Toplevel(root)
         ventana_perfil.title("Elegir avatar")
         ventana_perfil.resizable(NO, NO)
@@ -70,10 +76,15 @@ def pantalla_inicio(root):
         ]
 
         Label(ventana_perfil, text="Elegí tu avatar", font=('Arial', 16)).pack(pady=10)
+        def al_cerrar():
+            ventana_perfil.destroy()
+            canvas.tag_bind(boton_perfil, "<Button-1>", abrir_perfil)
+        ventana_perfil.protocol("WM_DELETE_WINDOW", al_cerrar)
 
         def elegir(av):
             estado["avatar"] = av
             ventana_perfil.destroy()
+            canvas.tag_bind(boton_perfil, "<Button-1>", abrir_perfil)
 
         frame = Frame(ventana_perfil)
         frame.pack()
@@ -92,9 +103,14 @@ def pantalla_inicio(root):
         mostrar_avatares()
 
     def seleccion_personajes(e):
+        canvas.tag_unbind(Boton_jugar, "<Button-1>")
         ventana_perfil = Toplevel(root)
         ventana_perfil.title("Elegir personajes")
         ventana_perfil.resizable(NO, NO)
+
+        def al_cerrar():
+            ventana_perfil.destroy()
+            canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
 
         def construir_lista(index=0, resultado=None):
             if resultado is None:
@@ -153,15 +169,25 @@ def pantalla_inicio(root):
         mostrar_personajes()
         Button(ventana_perfil, text="Confirmar", font=('Arial', 14),
                command=confirmar).pack(pady=10)
+        
+
+    def abrir_info(e):
+        canvas.tag_unbind(boton_info, "<Button-1>")
+        ventana_info = Toplevel(root)
+        ventana_info.title("Información")
+        ventana_info.resizable(NO, NO)
+        with open("data/info.txt", "r", encoding="utf-8") as archivo:
+            info = archivo.read()
+        Label(ventana_info, text=info, font=('Arial', 14),
+              justify=LEFT).pack(padx=20, pady=20)
+        def cerrar():
+            ventana_info.destroy()
+            canvas.tag_bind(boton_info, "<Button-1>", abrir_info)
+        ventana_info.protocol("WM_DELETE_WINDOW", cerrar)
+        Button(ventana_info, text="Cerrar", command=cerrar).pack(pady=10)
+        
 
     canvas.tag_bind(Boton_jugar, "<Button-1>", iniciar)
-    canvas.tag_bind(boton_info, "<Button-1>", lambda e: print("info"))
+    canvas.tag_bind(boton_info, "<Button-1>", abrir_info)
     canvas.tag_bind(boton_perfil, "<Button-1>", abrir_perfil)
     
-
-if __name__ == "__main__":
-    root = Tk()
-    root.title("Inicio")
-    root.resizable(NO, NO)
-    pantalla_inicio(root)
-    root.mainloop()
